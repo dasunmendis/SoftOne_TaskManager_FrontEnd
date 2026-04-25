@@ -1,0 +1,16 @@
+.list-group-item {
+    transition: all 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.text-decoration-line-through {
+    color: #6c757d;
+}
+
+/* Optional pointer for the checkbox */
+.form-check-input {
+    cursor: pointer;
+}

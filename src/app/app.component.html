@@ -1,0 +1,103 @@
+<div class="container mt-5" *ngIf="!isAuthenticated">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">Login to Task Manager</h4>
+                    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" formControlName="username">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" formControlName="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">Sign
+                            In</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4" *ngIf="isAuthenticated">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h2>Task Management Dashboard</h2>
+        <button class="btn btn-outline-secondary btn-sm" (click)="logout()">Logout</button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7 border-end">
+
+            <div class="row mb-3">
+                <div class="col-md-7">
+                    <input type="text" class="form-control" placeholder="Search tasks by title..."
+                        (input)="filterTasks($event)">
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select" (change)="sortTasks($event)">
+                        <option value="titleAsc">Sort by Title (A-Z)</option>
+                        <option value="titleDesc">Sort by Title (Z-A)</option>
+                        <option value="statusInc">Status (Pending First)</option>
+                        <option value="statusComp">Status (Completed First)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="list-group shadow-sm">
+                <div class="list-group-item d-flex justify-content-between align-items-center p-3"
+                    *ngFor="let task of filteredTasks">
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input me-3 fs-5" style="cursor: pointer;"
+                            [checked]="task.isCompleted" (change)="toggleComplete(task)">
+                        <div>
+                            <h6 class="mb-0" [ngClass]="{'text-decoration-line-through text-muted': task.isCompleted}">
+                                {{ task.title }}</h6>
+                            <small class="text-muted text-truncate d-inline-block" style="max-width: 250px;">{{
+                                task.description }}</small>
+                        </div>
+                    </div>
+                    <div class="text-nowrap">
+                        <button class="btn btn-sm btn-outline-primary me-2" (click)="editTask(task)">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task.id)">Delete</button>
+                    </div>
+                </div>
+
+                <div *ngIf="filteredTasks.length === 0" class="text-center text-muted p-4 border bg-light">
+                    No tasks found. Try adjusting your filters or adding a new task.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5 ps-4">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
+                    <h5 class="mb-0">{{ isEditMode ? 'Edit Task' : 'Add New Task' }}</h5>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Title</label>
+                            <input type="text" class="form-control" formControlName="title"
+                                [ngClass]="{'is-invalid': taskForm.get('title')?.invalid && taskForm.get('title')?.touched}">
+                            <div class="invalid-feedback">A task title is required (Max 100 characters).</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Description</label>
+                            <textarea class="form-control" rows="5" formControlName="description"></textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success flex-grow-1" [disabled]="taskForm.invalid">
+                                {{ isEditMode ? 'Update Task' : 'Save Task' }}
+                            </button>
+                            <button type="button" class="btn btn-secondary" *ngIf="isEditMode"
+                                (click)="resetForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
