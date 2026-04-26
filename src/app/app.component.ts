@@ -20,7 +20,10 @@ import { AlertComponent } from './core/components/alert/alert.component';
                         <div class="dropdown">
                             <button class="btn btn-primary bg-opacity-10 text-white border-0 fw-semibold d-flex align-items-center py-2 px-3 rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle fs-5 me-2"></i> 
-                                {{ username }}
+                                <div class="text-start">
+                                    <div class="lh-1" style="font-size: 0.9rem;">{{ firstName }} {{ lastName }}</div>
+                                    <div class="text-white text-opacity-75 fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px; text-transform: uppercase;">{{ role }}</div>
+                                </div>
                             </button>
                         </div>
                         <button class="btn btn-outline-light ms-3 fw-bold rounded-pill px-4" (click)="logout()">
@@ -48,11 +51,14 @@ import { AlertComponent } from './core/components/alert/alert.component';
 export class AppComponent implements OnInit {
     isLoggedIn = false;
     username = '';
+    firstName = '';
+    lastName = '';
+    role = '';
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         private router: Router
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.checkAuth();
@@ -69,9 +75,15 @@ export class AppComponent implements OnInit {
             if (storedUsername) {
                 this.isLoggedIn = true;
                 this.username = storedUsername;
+                this.firstName = sessionStorage.getItem('firstName') || '';
+                this.lastName = sessionStorage.getItem('lastName') || '';
+                this.role = sessionStorage.getItem('role') || '';
             } else {
                 this.isLoggedIn = false;
                 this.username = '';
+                this.firstName = '';
+                this.lastName = '';
+                this.role = '';
             }
         }
     }
