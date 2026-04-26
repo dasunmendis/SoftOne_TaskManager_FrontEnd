@@ -20,6 +20,26 @@ import { AuthService } from '../../../core/services/auth.service';
                     <p class="text-secondary fs-6">Sign up to get started with TaskManager.</p>
                 </div>
                 <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control custom-input" id="firstNameInput" formControlName="firstName" placeholder="First Name" [ngClass]="{'is-invalid': registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched}">
+                                <label for="firstNameInput" class="text-muted">First Name</label>
+                                <div class="invalid-feedback ms-1" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+                                    First name is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control custom-input" id="lastNameInput" formControlName="lastName" placeholder="Last Name" [ngClass]="{'is-invalid': registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched}">
+                                <label for="lastNameInput" class="text-muted">Last Name</label>
+                                <div class="invalid-feedback ms-1" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+                                    Last name is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control custom-input" id="usernameInput" formControlName="username" placeholder="Username" [ngClass]="{'is-invalid': registerForm.get('username')?.invalid && registerForm.get('username')?.touched}">
                         <label for="usernameInput" class="text-muted">Choose a Username</label>
@@ -53,7 +73,7 @@ import { AuthService } from '../../../core/services/auth.service';
             background-size: 24px 24px;
         }
         .auth-card {
-            max-width: 440px;
+            max-width: 500px;
             width: 100%;
             box-shadow: 0 20px 50px rgba(0,0,0,0.08) !important;
             background: #ffffff;
@@ -104,6 +124,8 @@ export class RegisterComponent {
         @Inject(PLATFORM_ID) private platformId: Object
     ) {
         this.registerForm = this.fb.group({
+            firstName: ['', [Validators.required]],
+            lastName: ['', [Validators.required]],
             username: ['', [Validators.required]],
             password: ['', [Validators.required]]
         });

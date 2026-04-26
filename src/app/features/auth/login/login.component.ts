@@ -117,13 +117,17 @@ export class LoginComponent {
         const formValue = this.loginForm.value;
 
         this.authService.login(formValue).subscribe({
-            next: () => {
+            next: (response: any) => {
                 this.isLoading = false;
                 const encodedAuth = btoa(`${formValue.username}:${formValue.password}`);
 
                 if (isPlatformBrowser(this.platformId)) {
                     sessionStorage.setItem('basicAuth', encodedAuth);
                     sessionStorage.setItem('username', formValue.username);
+                    sessionStorage.setItem('firstName', response.firstName || '');
+                    sessionStorage.setItem('lastName', response.lastName || '');
+                    sessionStorage.setItem('role', response.role || '');
+                    
                     this.alertService.success('Logged in successfully!');
                     this.router.navigate(['/tasks']);
                 }
